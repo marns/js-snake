@@ -1,4 +1,6 @@
 
+var g_smoothingHack = null;
+
 var DisableSmoothing = function() {
 
     // Canvas nearest-neighbor scaling.
@@ -9,6 +11,7 @@ var DisableSmoothing = function() {
 
     // CLOSURE COMPILER WORKAROUND (it doesn't think imageSmoothingEnabled is used)
     cc.log('smoothing:' + context.imageSmoothingEnabled);
+    g_smoothingHack = context.imageSmoothingEnabled;
 };
 
 var MainMenuLayer = cc.Layer.extend({

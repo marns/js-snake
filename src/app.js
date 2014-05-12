@@ -23,7 +23,6 @@ var SnakeGameLayer = cc.Layer.extend({
         var size = cc.director.getWinSize();
 
         // Bind keyboard input
-        cc.log(':(');
         if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
             var local = this;
             cc.eventManager.addListener({
