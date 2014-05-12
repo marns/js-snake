@@ -1,4 +1,16 @@
 
+var DisableSmoothing = function() {
+
+    // Canvas nearest-neighbor scaling.
+    // Unfortunately it doesn't work in Safari or IE.
+    var canvas = document.getElementById('gameCanvas');
+    var context = canvas.getContext('2d');
+    context.imageSmoothingEnabled = false;
+
+    // CLOSURE COMPILER WORKAROUND (it doesn't think imageSmoothingEnabled is used)
+    cc.log('smoothing:' + context.imageSmoothingEnabled);
+};
+
 var MainMenuLayer = cc.Layer.extend({
     ctor:function () {
 
@@ -7,7 +19,7 @@ var MainMenuLayer = cc.Layer.extend({
 
         // Bind keyboard input
         if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
-            var local = this;
+
             cc.eventManager.addListener({
                 event: cc.EventListener.KEYBOARD,
                 onKeyPressed: function (key, event) {
@@ -17,6 +29,7 @@ var MainMenuLayer = cc.Layer.extend({
                 }
             }, this);
         }
+
         // Setup 32x32 render target
         var smallestDim = Math.min(size.width, size.height);
         var renderTex = cc.RenderTexture.create(32, 32);
@@ -33,14 +46,9 @@ var MainMenuLayer = cc.Layer.extend({
         if (cc._renderType == cc._RENDER_TYPE_WEBGL) {
             tex.setAliasTexParameters();
         } else {
-            var canvas = document.getElementById('gameCanvas');
-            var context = canvas.getContext('2d');
-            context.imageSmoothingEnabled = false;
-
+            DisableSmoothing();
             cc._addEventListener(window, 'resize', function () {
-                var canvas = document.getElementById('gameCanvas');
-                var context = canvas.getContext('2d');
-                context.imageSmoothingEnabled = false;
+                DisableSmoothing();
             }, false);
         }
 
@@ -61,14 +69,6 @@ var MainMenuLayer = cc.Layer.extend({
         this.schedule(function() {
             label.setVisible(!label.isVisible());
         }, 1);
-
-        /*
-        var label = cc.LabelTTF.create("SNAAAAKE!", "Arial", 38);
-        // position the label on the center of the screen
-        label.x = size.width / 2;
-        label.y = size.height / 2;
-        // add the label as a child to this layer
-        this.addChild(label, 5);*/
     }
 });
 

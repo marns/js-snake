@@ -23,6 +23,7 @@ var SnakeGameLayer = cc.Layer.extend({
         var size = cc.director.getWinSize();
 
         // Bind keyboard input
+        cc.log(':(');
         if (cc.sys.capabilities.hasOwnProperty('keyboard')) {
             var local = this;
             cc.eventManager.addListener({
@@ -57,16 +58,12 @@ var SnakeGameLayer = cc.Layer.extend({
 
         this._gameRules.init(gameData);
 
-
-
         // Setup objects
         this.makeBody(cc.p(GRID_SIZE/2, -4));
         this.makeBody(cc.p(GRID_SIZE/2, -3));
         this.makeBody(cc.p(GRID_SIZE/2, -2)); // First segment is snake head
         this.makeBody(cc.p(GRID_SIZE/2, -1));
         this.makeBody(cc.p(GRID_SIZE/2, 0));
-
-
 
         // Build walls
         //var GRID_WIDTH = (size.width-GRID_SIZE)/GRID_PITCH;
@@ -106,16 +103,10 @@ var SnakeGameLayer = cc.Layer.extend({
         if (cc._renderType == cc._RENDER_TYPE_WEBGL) {
             this._renderTex.getSprite().getTexture().setAliasTexParameters();
         } else {
-            // Canvas nearest-neighbor scaling.
-            // Unfortunately it doesn't work in Safari or IE.
-            var canvas = document.getElementById('gameCanvas');
-            var context = canvas.getContext('2d');
-            context.imageSmoothingEnabled = false;
+            DisableSmoothing();
 
             cc._addEventListener(window, 'resize', function () {
-                var canvas = document.getElementById('gameCanvas');
-                var context = canvas.getContext('2d');
-                context.imageSmoothingEnabled = false;
+                DisableSmoothing();
             }, false);
         }
 
