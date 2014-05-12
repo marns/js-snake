@@ -31,12 +31,20 @@ var GridObj = cc.Class.extend( {
         return this._position;
     },
     setGridPos:function(pos) {
+
         this._position = pos;
-        this._gameGrid.set(pos, this);
+        if (!this._gameGrid.get(pos)) {
+            this._gameGrid.set(pos, this);
+        } else {
+            cc.warn('Grid position not empty ' + pos.x + ',' + pos.y);
+        }
         this._node.setPosition(this.getPointPos());
     },
     moveTo:function(pos) {
-        this._gameGrid.set(this._position, null);
+        if (this._gameGrid.get(this._position) == this)
+            this._gameGrid.set(this._position, null);
+        else
+            cc.log('not this at ' + this._position.x + ',' + this._position.y);
         this.setGridPos(pos);
     },
     getPointPos:function() {

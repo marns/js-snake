@@ -57,13 +57,6 @@ var SnakeGameLayer = cc.Layer.extend({
 
         this._gameRules.init(gameData);
 
-        // Setup objects
-        this.makeBody(cc.p(GRID_SIZE/2, -4));
-        this.makeBody(cc.p(GRID_SIZE/2, -3));
-        this.makeBody(cc.p(GRID_SIZE/2, -2)); // First segment is snake head
-        this.makeBody(cc.p(GRID_SIZE/2, -1));
-        this.makeBody(cc.p(GRID_SIZE/2, 0));
-
         // Build walls
         //var GRID_WIDTH = (size.width-GRID_SIZE)/GRID_PITCH;
         //var GRID_HEIGHT = (size.height-GRID_SIZE)/GRID_PITCH;
@@ -77,6 +70,21 @@ var SnakeGameLayer = cc.Layer.extend({
             new GridObstacle(this._renderTex, this._gameGrid, cc.p(0, y));
             new GridObstacle(this._renderTex, this._gameGrid, cc.p(GRID_WIDTH-1, y));
         }
+
+        // Setup objects
+        this._pos = cc.p(GRID_SIZE/2, 0);
+        this._snakeBody = [
+            new SnakeBody(this._renderTex, this._gameGrid, cc.p(GRID_SIZE/2, -3)),
+            new SnakeBody(this._renderTex, this._gameGrid, cc.p(GRID_SIZE/2, -2)),
+            new SnakeBody(this._renderTex, this._gameGrid, cc.p(GRID_SIZE/2, -1)),
+            new SnakeBody(this._renderTex, this._gameGrid, cc.p(GRID_SIZE/2, 0))
+        ];
+        //this.makeBody(cc.p(GRID_SIZE/2, 2));
+        //this.makeBody(cc.p(GRID_SIZE/2, 1));
+        //this.makeBody(cc.p(GRID_SIZE/2, 0)); // First segment is snake head
+        //this.makeBody(cc.p(GRID_SIZE/2, -1));
+        //this.makeBody(cc.p(GRID_SIZE/2, 0));
+        this._headIdx = 3;
 
         // Scoreboard!
         //'01234567\n89ABCDEF\nGHIJKLMN\nOPQRSTUV\nWXYZ?!'
@@ -127,8 +135,6 @@ var SnakeGameLayer = cc.Layer.extend({
         this._headIdx++;
         if (this._headIdx >= this._snakeBody.length)
             this._headIdx = 0;
-
-        //cc.log('headIdx=' + this._headIdx);
     },
     getPos:function(pos) {
         return cc.p(pos.x * GRID_PITCH, pos.y * GRID_PITCH);
